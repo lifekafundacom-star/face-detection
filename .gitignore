@@ -1,0 +1,36 @@
+# IDE and editor files
+.idea/
+nbproject/
+.buildpath
+.project
+.settings/
+Thumbs.db
+.DS_Store
+
+# Composer dependencies
+/vendor/
+vendor_bk/
+composer.phar
+
+# Backups and temporary files
+storage_del/
+*-before-restore
+.ovi-knowns/
+*_old.php
+*_backup*
+composer.lock_bkk
+index.php_*
+index.php__
+
+# Runtime caches and logs
+/runtime/
+/backend/runtime/*
+!/backend/runtime/.gitignore
+/console/runtime/*
+!/console/runtime/.gitignore
+/backend/web/assets/*
+!/backend/web/assets/.gitignore
+*.log
+
+# Sensitive service account keys
+ga-service-account.json

@@ -1,0 +1,41 @@
+# Set the default charset.
+AddDefaultCharset UTF-8
+
+# Shared hosts may reject Options directives with a 500 error.
+# Options -Indexes
+
+# Enable symlinks
+# Options +FollowSymlinks
+
+# Enable mod_rewrite
+RewriteEngine On
+RewriteBase /face_detection_app_sb/
+
+# Force HTTPS on public hosts before internal rewrites.
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$ [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Work Management backend app
+RewriteRule ^backend/work-management/(assets|uploads)/(.*)$ backend/web/work-management/$1/$2 [L]
+RewriteRule ^backend/work-management/?(.*)$ backend/web/work-management/index.php [QSA,L]
+
+# Backend redirect
+RewriteCond %{REQUEST_URI} !/backend/web
+RewriteCond %{REQUEST_URI} /backend
+RewriteRule ^backend/?(.*)$ backend/web/$1 [L]
+
+# Api redirect
+RewriteCond %{REQUEST_URI} /api
+RewriteRule ^api/?(.*)$ api/web/$1 [L]
+
+# Storage redirect
+RewriteCond %{REQUEST_URI} /storage
+RewriteRule ^storage/?(.*)$ storage/upload/$1 [L]
+
+# Redirect root or index.php directly to backend
+RewriteRule ^(index\.php)?$ backend/ [R=301,L]
+
+# Redirect any other non-backend requests to backend
+RewriteCond %{REQUEST_URI} !^.*/(backend|api|storage)
+RewriteRule ^.*$ backend/ [R=301,L]

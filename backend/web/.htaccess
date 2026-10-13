@@ -1,0 +1,31 @@
+# Set the default charset.
+AddDefaultCharset UTF-8
+
+# Shared hosts may reject Options directives with a 500 error.
+# Options -Indexes
+# Options +FollowSymLinks
+
+IndexIgnore */*
+
+RewriteEngine On
+# RewriteBase is intentionally disabled for server-root and subfolder deployments.
+# RewriteBase /
+
+# Preserve the current scheme when removing www.
+RewriteRule ^ - [E=protossl]
+RewriteCond %{HTTPS} on
+RewriteRule ^ - [E=protossl:s]
+
+# Redirect www to non-www.
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
+
+# Standalone work-management app under backend.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^work-management(?:/.*)?$ work-management/index.php [QSA,L]
+
+# Yii backend pretty URLs.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
